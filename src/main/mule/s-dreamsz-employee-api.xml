@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" 
+xmlns:min-log="http://www.mulesoft.org/schema/mule/min-log" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" 
+xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/min-log http://www.mulesoft.org/schema/mule/min-log/current/mule-min-log.xsd">
+	<flow name="s-dreamsz-employee-api-main">
+        <http:listener config-ref="s-dreamsz-employee-api-httpListenerConfig" path="${secure::api.http.listener.path}">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="s-dreamsz-employee-api-config" />
+        <error-handler>
+            
+        </error-handler>
+    </flow>
+    <flow name="get:\employees:s-dreamsz-employee-api-config">
+		<ee:transform doc:name="Transform Message" doc:id="1c811a9a-beb9-449d-910e-1d5fe8c9dc07" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status" : "success"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+    </flow>
+</mule>
