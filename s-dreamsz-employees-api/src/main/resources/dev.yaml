@@ -1,0 +1,9 @@
+application:
+ name: "s-dreamsz-employees-api"
+api:
+ name: "employees-api"
+ version: "v1"
+ http:
+  port: "8071"
+  listener:
+   path: "/api/${secure::api.name}/${secure::api.version}/*"
